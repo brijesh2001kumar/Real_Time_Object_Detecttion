@@ -1,16 +1,13 @@
 # Importing Custom built fucntions
-from gc import callbacks
 from yolo_func_utils import read_anchors, read_classes, preprocess_image, generate_colors
 from yolo_head import yolo_head
 from yolo_eval import yolo_eval
 from yolo_draw_boxes import draw_boxes
 
 # Deep learning libraries (Tensorflow Framework)
-import tensorflow as tf
 from tensorflow.keras.models import load_model
 
 # Image Processing Libraries
-from PIL import Image
 import cv2
 
 # Library for downloading model from google drive
@@ -62,7 +59,6 @@ class VideoProcessor:
     # taking variable input from outside the callback
     def __init__(self) -> None:
         self.max_boxes = 5
-        # self.score_threshold = .5
 
     def recv(self, frame):
 
@@ -71,22 +67,18 @@ class VideoProcessor:
         # step 2 : resizing the ndarray to (1200,900)
         image = cv2.resize(frm, (1200, 900), interpolation=cv2.INTER_LINEAR)
         # step 3 : preprocessing the image for model implementation
-        image, image_data = preprocess_image(
-            image, model_image_size=(608, 608))
+        image, image_data = preprocess_image(image, model_image_size=(608, 608))
         # step 4 : Applying the model to image_data
         yolo_model_outputs = yolo_model(image_data)
         # step 5 : converting the model encoded output to more workable form
         yolo_outputs = yolo_head(yolo_model_outputs, anchors, len(class_names))
         # step 6 : finding the classes, boxes and their scores for the best detections
-        out_scores, out_boxes, out_classes = yolo_eval(
-            yolo_outputs, [900.0, 1200.0], self.max_boxes, 0.5, 0.5)
+        out_scores, out_boxes, out_classes = yolo_eval(yolo_outputs, [900.0, 1200.0], self.max_boxes, 0.5, 0.5)
         # step 7 : drawing the bounding boxes of predicted classes and objects
         draw_boxes(image, out_scores, out_boxes,
                    out_classes, class_names, colors)
-        # step 8 : converting pillow image object to ndarray object
-        img = np.array(image)
-        # step 9 : returning the processed frame as a 'VideoFrame' Object
-        return av.VideoFrame.from_ndarray(img, format='bgr24')
+        # step 8 : returning the processed frame as a 'VideoFrame' Object
+        return av.VideoFrame.from_ndarray(image, format='bgr24')
 
 
 

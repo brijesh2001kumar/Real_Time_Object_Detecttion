@@ -1,10 +1,9 @@
 # Importing the required Libraries and packages
 import numpy as np
-from PIL import Image
 import tensorflow as tf
 import colorsys
 import random
-
+import cv2
 
 """
 Convert YOLO box prediction to bounding box corners.
@@ -69,11 +68,11 @@ preprocessing the input image
 """
 
 def preprocess_image(image, model_image_size):
-    image = Image.fromarray(image)   #making Image object from ndarray
-    resized_image = image.resize(tuple(reversed(model_image_size)), Image.BICUBIC)  #resizing image to model input size
-    image_data = np.array(resized_image, dtype='float32')  #converting from Image object to Float32 ndarray
-    image_data /= 255.  #standardising the array values
-    image_data = np.expand_dims(image_data, 0)  # Add batch dimension.
+
+    resized_image = cv2.resize(image, tuple(reversed(model_image_size)), interpolation=cv2.INTER_LINEAR)
+    image_data = np.array(resized_image, dtype='float32')
+    image_data /= 255.
+    image_data = np.expand_dims(image_data, 0)
     return image, image_data
 
 """
