@@ -108,6 +108,7 @@ st.markdown(
 #creating containers for different sections of app
 header = st.container()
 app = st.container()
+video = st.container()
 model_intro = st.container()
 model_details = st.container()
 yolo_summary = st.container()
@@ -150,6 +151,12 @@ with app:
         # ctx.video_processor.score_threshold = st.slider(
         #     'Score Threshold ', min_value=0.0, max_value=1.0, value=.5, step=.1)
     st.markdown("""---""")
+
+with video:
+
+    st.subheader('Sample Video')
+    video = open('samplevideo.mkv','rb')
+    st.video(video)
 
 
 with model_intro:
