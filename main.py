@@ -34,51 +34,51 @@ model_image_size = (608., 608.)  # Same as yolo_model input layer size
 # Selecting random colors for bounding boxes of different classes
 colors = generate_colors(class_names)
 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+# st.write('Caution : For first-time usage, App can take some time to load (ps : for Downloading the Model)')
+# # Making the Function decorator to memoize(cache) function execution of loading the model
+# @st.cache
+# def load_model_cached(url, output):
 
-st.write('Caution : For first-time usage, App can take some time to load (ps : for Downloading the Model)')
-# Making the Function decorator to memoize(cache) function execution of loading the model
-@st.cache
-def load_model_cached(url, output):
+#     # step 1 : downloading the model.h5 file from the google drive url and storing to the 'output' location
+#     gdown.download(url, output, quiet=False)
 
-    # step 1 : downloading the model.h5 file from the google drive url and storing to the 'output' location
-    gdown.download(url, output, quiet=False)
-
-    # step 2 : returning the model loaded using the tf.keras.load_model function
-    return(load_model('yolo.h5', compile=False))
-
-
-# storing the yolo model in yolo_model
-yolo_model = load_model_cached(url, output)
+#     # step 2 : returning the model loaded using the tf.keras.load_model function
+#     return(load_model('yolo.h5', compile=False))
 
 
-# streamlit-webrtc Callback class for all the required frame processing for object detection
-# Input -> frame : input frame captured by webrtc-streamer
-# Output -> frame : processed input frame for object detection
-class VideoProcessor:
+# # storing the yolo model in yolo_model
+# yolo_model = load_model_cached(url, output)
 
-    # taking variable input from outside the callback
-    def __init__(self) -> None:
-        self.max_boxes = 5
 
-    def recv(self, frame):
+# # streamlit-webrtc Callback class for all the required frame processing for object detection
+# # Input -> frame : input frame captured by webrtc-streamer
+# # Output -> frame : processed input frame for object detection
+# class VideoProcessor:
 
-        # step 1 : converting frame ('VideoFrame' Object  of 'pyAV' package) to numpy array
-        frm = frame.to_ndarray(format='bgr24')
-        # step 2 : resizing the ndarray to (1200,900)
-        image = cv2.resize(frm, (1200, 900), interpolation=cv2.INTER_LINEAR)
-        # step 3 : preprocessing the image for model implementation
-        image, image_data = preprocess_image(image, model_image_size=(608, 608))
-        # step 4 : Applying the model to image_data
-        yolo_model_outputs = yolo_model(image_data)
-        # step 5 : converting the model encoded output to more workable form
-        yolo_outputs = yolo_head(yolo_model_outputs, anchors, len(class_names))
-        # step 6 : finding the classes, boxes and their scores for the best detections
-        out_scores, out_boxes, out_classes = yolo_eval(yolo_outputs, [900.0, 1200.0], self.max_boxes, 0.5, 0.5)
-        # step 7 : drawing the bounding boxes of predicted classes and objects
-        draw_boxes(image, out_scores, out_boxes,
-                   out_classes, class_names, colors)
-        # step 8 : returning the processed frame as a 'VideoFrame' Object
-        return av.VideoFrame.from_ndarray(image, format='bgr24')
+#     # taking variable input from outside the callback
+#     def __init__(self) -> None:
+#         self.max_boxes = 5
+
+#     def recv(self, frame):
+
+#         # step 1 : converting frame ('VideoFrame' Object  of 'pyAV' package) to numpy array
+#         frm = frame.to_ndarray(format='bgr24')
+#         # step 2 : resizing the ndarray to (1200,900)
+#         image = cv2.resize(frm, (1200, 900), interpolation=cv2.INTER_LINEAR)
+#         # step 3 : preprocessing the image for model implementation
+#         image, image_data = preprocess_image(image, model_image_size=(608, 608))
+#         # step 4 : Applying the model to image_data
+#         yolo_model_outputs = yolo_model(image_data)
+#         # step 5 : converting the model encoded output to more workable form
+#         yolo_outputs = yolo_head(yolo_model_outputs, anchors, len(class_names))
+#         # step 6 : finding the classes, boxes and their scores for the best detections
+#         out_scores, out_boxes, out_classes = yolo_eval(yolo_outputs, [900.0, 1200.0], self.max_boxes, 0.5, 0.5)
+#         # step 7 : drawing the bounding boxes of predicted classes and objects
+#         draw_boxes(image, out_scores, out_boxes,
+#                    out_classes, class_names, colors)
+#         # step 8 : returning the processed frame as a 'VideoFrame' Object
+#         return av.VideoFrame.from_ndarray(image, format='bgr24')
 
 
 
@@ -128,34 +128,34 @@ with side_bar:
     for name in class_names:
         st.write(name) 
 
-with app:
+# with app:
 
-    st.subheader('The App')
+#     st.subheader('The App')
 
-    # streamlit-webrtc requires callbacks to process image and audio frames which is one major
-    # difference between OpenCV GUI and streamlit-webrtc
-    ctx = webrtc_streamer(key='key',
-                        # class object passed to video_processor_factory for video processing
-                        video_processor_factory=VideoProcessor,
-                        # rtc_configuration parameter to deploy the app to the cloud
-                        rtc_configuration=RTCConfiguration(
-                            {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}),
-                        # muting the audio input
-                        video_html_attrs=VideoHTMLAttributes(
-                            autoPlay=True, controls=True, style={"width": "100%"}, muted=True),
-                        )
+#     # streamlit-webrtc requires callbacks to process image and audio frames which is one major
+#     # difference between OpenCV GUI and streamlit-webrtc
+#     ctx = webrtc_streamer(key='key',
+#                         # class object passed to video_processor_factory for video processing
+#                         video_processor_factory=VideoProcessor,
+#                         # rtc_configuration parameter to deploy the app to the cloud
+#                         rtc_configuration=RTCConfiguration(
+#                             {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}),
+#                         # muting the audio input
+#                         video_html_attrs=VideoHTMLAttributes(
+#                             autoPlay=True, controls=True, style={"width": "100%"}, muted=True),
+#                         )
 
-    if ctx.video_processor:
-        ctx.video_processor.max_boxes = st.slider(
-            'Max boxes to predict', min_value=1, max_value=10, value=5, step=1)
-        # ctx.video_processor.score_threshold = st.slider(
-        #     'Score Threshold ', min_value=0.0, max_value=1.0, value=.5, step=.1)
-    st.markdown("""---""")
+#     if ctx.video_processor:
+#         ctx.video_processor.max_boxes = st.slider(
+#             'Max boxes to predict', min_value=1, max_value=10, value=5, step=1)
+#         # ctx.video_processor.score_threshold = st.slider(
+#         #     'Score Threshold ', min_value=0.0, max_value=1.0, value=.5, step=.1)
+#     st.markdown("""---""")
 
 with video:
 
     st.subheader('Sample Video')
-    video = open('samplevideo.mkv','rb')
+    video = open('sample.mp4','rb')
     st.video(video)
 
 
