@@ -4,8 +4,8 @@ from yolo_head import yolo_head
 from yolo_eval import yolo_eval
 from yolo_draw_boxes import draw_boxes
 
-# Deep learning libraries (Tensorflow Framework)
-from tensorflow.keras.models import load_model
+# # Deep learning libraries (Tensorflow Framework)
+# from tensorflow.keras.models import load_model
 
 # Image Processing Libraries
 import cv2
