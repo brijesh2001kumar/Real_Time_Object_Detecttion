@@ -46,7 +46,7 @@ read classes names as string from prediction_class.text
 """
 
 def read_classes(classes_path):
-    with open(classes_path) as f:
+    with open(classes_path, "r", encoding='utf-8', errors="ignore") as f:
         class_names = f.readlines()
     class_names = [c.strip() for c in class_names]
     return class_names
@@ -57,7 +57,7 @@ read anchor dimensions as float dtype from prediction_anchors.text
 
 def read_anchors(anchors_path):
 
-    with open(anchors_path) as f:
+    with open(anchors_path,"r", encoding='utf-8', errors="ignore") as f:
         anchors = f.readline()
         anchors = [float(x) for x in anchors.split(',')]
         anchors = np.array(anchors).reshape(-1, 2)
