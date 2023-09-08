@@ -4,5 +4,5 @@ Pillow==9.2.0
 streamlit
 tensorflow
 gdown==4.5.1
-streamlit_webrtc==0.42.0
+streamlit_webrtc
 
