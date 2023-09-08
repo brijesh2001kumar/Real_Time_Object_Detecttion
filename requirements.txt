@@ -1,8 +1,8 @@
-numpy==1.19.5
+numpy
 opencv_python
 Pillow==9.2.0
 streamlit
-tensorflow==2.5.0
+tensorflow
 gdown==4.5.1
 streamlit_webrtc==0.42.0
 

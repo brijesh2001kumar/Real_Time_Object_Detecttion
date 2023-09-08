@@ -22,17 +22,17 @@ from streamlit_webrtc import webrtc_streamer, RTCConfiguration, VideoHTMLAttribu
 import av
 
 
-# # Initiallizing Variables
-# # google drive link to the model
-# url = 'https://drive.google.com/uc?id=1D3peEMoCqG1IdD6hYrHdSSBM6Bsdw2eP'
-# output = 'yolo.h5'  # output location directory
-# # reading class names stored in prediction_classes.txt
-# class_names = read_classes("prediction_classes.txt")
-# # reading anchors and their dimensions stored in prediction_anchors.txt
-# anchors = read_anchors("prediction_anchors.txt")
-# model_image_size = (608., 608.)  # Same as yolo_model input layer size
-# # Selecting random colors for bounding boxes of different classes
-# colors = generate_colors(class_names)
+# Initiallizing Variables
+# google drive link to the model
+url = 'https://drive.google.com/uc?id=1D3peEMoCqG1IdD6hYrHdSSBM6Bsdw2eP'
+output = 'yolo.h5'  # output location directory
+# reading class names stored in prediction_classes.txt
+class_names = read_classes("prediction_classes.txt")
+# reading anchors and their dimensions stored in prediction_anchors.txt
+anchors = read_anchors("prediction_anchors.txt")
+model_image_size = (608., 608.)  # Same as yolo_model input layer size
+# Selecting random colors for bounding boxes of different classes
+colors = generate_colors(class_names)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------
 # st.write('Caution : For first-time usage, App can take some time to load (ps : for Downloading the Model)')
