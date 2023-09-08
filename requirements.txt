@@ -2,7 +2,7 @@ numpy==1.19.5
 opencv_python
 Pillow==9.2.0
 streamlit
-tensorflow
+tensorflow==2.5.0
 gdown==4.5.1
 streamlit_webrtc==0.42.0
 
