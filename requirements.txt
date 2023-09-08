@@ -1,6 +1,5 @@
 numpy==1.19.5
 opencv_python
-joblib==1.0.1
 Pillow==9.2.0
 streamlit
 tensorflow
